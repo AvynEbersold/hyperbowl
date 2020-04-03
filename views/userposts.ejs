@@ -1,0 +1,45 @@
+<%- include('partials/metadata'); -%> <%- include('partials/header') -%> <% if(authorized){ %> <%- include('partials/sidebar') -%> <% } %>
+
+<div class="default-header">
+	<div class="default-header-text-div">
+		<h1 class="default-header-text">My Posts</h1>
+	</div>
+</div>
+<div class="row dark-primary-txt">
+	<% if(posts.length) { %> <% for(let i = 0; i < posts.length; i++){ %>
+	<div class="col-lg-3 col-md-6" id="<%= posts[i].id %>">
+		<div class="card post-thumbnail margin-top">
+			<a href="/posts/<%= posts[i].id %>" class="article-link-button">
+				<div class="card-img-container">
+					<% if(!posts[i].image){ %>
+					<img src="https://picsum.photos/800/" class="card-img-top" alt="Cover photo" onError="this.src = 'https://picsum.photos/800/'" />
+					<% } else { %>
+					<img src="<%= posts[i].image %>" class="card-img-top" alt="Cover photo" onError="this.src = 'https://picsum.photos/800/'" />
+					<% } %>
+				</div>
+			</a>
+			<div class="card-body">
+				<h5 class="card-title"><%= posts[i].title %></h5>
+				<span id="postPreview<%= i %>" style="display: none;"><%- posts[i].sections[0] %></span>
+				<script type="text/javascript">
+					var content = document.getElementById('postPreview<%= i %>');
+					var textContent = content.textContent;
+					var preview = textContent.substring(0, 120);
+					content.style.display = 'inline';
+					content.innerHTML = preview + '...';
+				</script>
+				<a href="/posts/<%= posts[i].id %>" class="btn article-link-button margin-top margin-bottom">View Post</a>
+				<a href="/posts/<%= posts[i].id %>/edit" class="btn article-link-button">Edit Post</a>
+				<% if(currentUser.username == author){ %>
+				<i data-id="<%= posts[i].id %>" class="full-width btn delete-post icon-option fas fa-trash-alt"></i>
+				<% } %>
+			</div>
+		</div>
+	</div>
+	<% } %> <% } else { %>
+	<div class="section-header centered">
+		<h2>You don't have any posts. How about you <a href="/create">create one?</a></h2>
+	</div>
+	<% } %>
+</div>
+<%- include('partials/footer') -%>

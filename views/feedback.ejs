@@ -1,0 +1,30 @@
+<%- include('partials/metadata') -%>
+<%- include('partials/header') -%>
+
+<div class="sign-in-bg">
+  <div class="row col-lg-4 col-md-8 col-sm-12 sign-in">
+    <div class="card sign-in-body dark-secondary-txt">
+      <div class="card-body sign-in-body-container">
+        <div class="sign-in-body-container-header">
+          <h1>Tell Us What We Should Improve:</h1>
+        </div>
+        <!-- Makes POST request to /feedback route -->
+        <div class="sign-in-body-container-content">
+          <form action="/feedback" method="POST">
+            <div class="form-group">
+              <label for="issue">Issue/Recommendation</label>
+              <input type="text" class="form-control" name="issue" autocomplete="off">
+            </div>
+            <div class="form-group">
+              <label for="details">Extra Details</label>
+              <textarea class="form-control" name="details" autocomplete="off"></textarea>
+            </div>
+            <button type="submit" class="btn btn-dark">Submit Feedback</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

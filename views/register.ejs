@@ -1,0 +1,42 @@
+<%- include('partials/metadata') -%>
+<%- include('partials/header') %>
+
+<div class="sign-in-bg">
+  <div class="row col-lg-4 col-md-8 col-sm-12 sign-in">
+    <div class="card sign-in-body dark-secondary-txt">
+      <div class="card-body sign-in-body-container">
+        <div class="sign-in-body-container-header">
+          <h1>Register to Hyperbowl</h1>
+        </div>
+        <!-- Makes POST request to /register route -->
+        <div class="sign-in-body-container-content">
+          <form action="/register" method="POST">
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input autocomplete="off" type="email" class="form-control" name="email" value="<%= email %>"required>
+            </div>
+            <div class="form-group">
+              <label for="profileImage">Profile Image URL <small>(Optional)</small></label>
+              <input autocomplete="off" type="text" class="form-control" name="profileImage">
+            </div>
+            <div class="form-group">
+              <label for="password">Username</label>
+              <input autocomplete="off" type="text" class="form-control" name="username" value="<%= username %>" required>
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input autocomplete="off" type="password" class="form-control" name="password" required>
+            </div>
+            <% if(error){ %>
+              <p class="error-txt"><small><%= error %></small></p>
+            <% } %>
+            <button type="submit" class="btn btn-dark">Register</button>
+          </form>
+          <br><p><small>Already have an account? Login <a href="/login">here</a>.</small></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

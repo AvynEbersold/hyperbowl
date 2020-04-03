@@ -1,0 +1,40 @@
+{
+  "name": "Secrets",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "assert": "^2.0.0",
+    "async": "^3.1.0",
+    "await": "^0.2.6",
+    "body-parser": "^1.18.3",
+    "crypto": "^1.0.1",
+    "dotenv": "^6.2.0",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "express-force-ssl": "^0.3.2",
+    "express-session": "^1.15.6",
+    "fs": "0.0.1-security",
+    "http": "0.0.0",
+    "https": "^1.0.0",
+    "lodash": "^4.17.15",
+    "mongoose": "^5.7.7",
+    "mongoose-findorcreate": "^3.0.0",
+    "nodemailer": "^6.4.2",
+    "passport": "^0.4.0",
+    "passport-google-oauth20": "^1.0.0",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^5.0.1",
+    "request": "^2.88.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": "10.15.3"
+  }
+}

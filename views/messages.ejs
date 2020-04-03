@@ -1,0 +1,63 @@
+<%- include('partials/metadata'); -%>
+<%- include('partials/header') -%>
+<%- include('partials/sidebar') -%>
+
+<div class="main">
+  <div class="default-header">
+    <div class="default-header-text-div">
+      <h1 class="default-header-text">Messages</h1>
+    </div>
+  </div>
+  <div class="dark-secondary-txt margin-bottom">
+    <div class="col-lg-6 col-md-10 col-sm-12 centered-div margin-top">
+      <div class="accordion" id="bootstrapAccordion">
+        <div class="card">
+          <div class="card-header" id="headingOne">
+            <h2 class="mb-0">
+              <button class="btn btn-link collapsed secondary-colored-text" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                Inbox (<span class="inbox-message-number"><%= messages.length %></span>)<i class="margin-left fas fa-chevron-down"></i>
+              </button>
+            </h2>
+          </div>
+
+          <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#bootstrapAccordion">
+            <% if(messages.length){ %>
+              <% for(let i = messages.length - 1; i > messages.length - (messages.length + 1); i--){ %>
+                <div class="message dark-secondary-txt" id="messagediv-<%= messages[i]._id %>">
+                  <span class="message-delete-btn" id="<%= messages[i]._id %>">&times;</span>
+                  <p><img class="message-user-img" src="<%= messages[i].authorProfileImage %>" alt="Profile image" onError="this.src = 'https://picsum.photos/200/'"><%= messages[i].authorUsername %>:</p>
+                  <hr>
+                  <h4><%= messages[i].title %></h4>
+                  <p><%= messages[i].content %></p>
+                </div>
+              <% } %>
+            <% } else { %>
+              <h2 class="message-inbox-text centered">No Messages</h2>
+            <% } %>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <form action="/messages" method="POST" autocomplete="off" id="messageForm">
+            <div class="form-group">
+              <label for="text">To</label>
+              <input type="text" class="form-control post-draft-title-content" id="messageRecipient" name="messageRecipient" placeholder="Username (Case-Sensitive)" value="<%= messageRecipient %>" required>
+            </div>
+            <div class="form-group">
+              <label for="text">Title</label>
+              <input type="text" class="form-control post-draft-title-content" id="messageTitle" name="messageTitle" value="<%= messageTitle %>" required>
+            </div>
+            <div class="form-group">
+              <label for="text">Content</label>
+              <textarea type="text" class="form-control post-draft-body-content" id="messageContent" name="messageContent" rows="4" required><%= messageBody %></textarea>
+            </div>
+            <button type="button" class="btn btn-dark send-message-btn">Send</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') -%>

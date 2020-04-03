@@ -1,0 +1,47 @@
+<%- include('partials/metadata'); -%>
+<%- include('partials/header') -%>
+<%- include('partials/sidebar') %>
+
+<div class="main">
+  <div class="jumbotron">
+    <div class="container">
+      <h1 class="display-3">The Hyperbowl Newsletter</h1>
+      <p>Get the best posts and suggestions for writing better.</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-8 centered-div margin-top margin-bottom">
+      <% if(currentUser.preferences.email.subscribed == true){ %>
+        <form action="/unsubscribe" method="POST">
+          <p>You are currently subscribed to the newsletter. You can unsubscribe by clicking the button below.</p>
+          <button type="submit" class="btn btn-success mb-2 margin-top">Unsubscribe</button>
+        </form>
+      <% } else { %>
+        <form action="/newsletter" method="POST">
+        <div class="form-group row">
+          <label class="col-sm-5 col-form-label">Email</label>
+          <div class="col-sm-7">
+            <input type="text" readonly class="form-control-plaintext" value="<%= currentUser.email %>" name="email">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-sm-5 col-form-label">First Name</label>
+          <div class="col-sm-7">
+            <input type="text" class="form-control" name="fName">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-sm-5 col-form-label">Last Name</label>
+          <div class="col-sm-7">
+            <input type="text" class="form-control" name="lName">
+          </div>
+        </div>
+        <button type="submit" class="btn btn-success mb-2 margin-top">Subscribe</button>
+        <br><a href='/settings'>Don't see your email?</a>
+      </form>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

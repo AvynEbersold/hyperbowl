@@ -1,0 +1,95 @@
+<%- include('partials/metadata') -%> <%- include('partials/header') -%> <% if(authorized){ %> <%- include('partials/sidebar') -%> <% } %>
+
+<div class="main margin-bottom">
+	<% if(user.preferences.styles.profileBackgroundImage){ %>
+	<div class="user-title-header margin-bottom" style="background-image: url(<%= user.preferences.styles.profileBackgroundImage %>);">
+		<% } else { %>
+		<div class="user-title-header margin-bottom">
+			<% } %>
+			<div class="user-title-header-text-div">
+				<h1 class="user-title-header-text"><%= user.username %></h1>
+				<% if(user.dateJoined){ %>
+				<p><small>Joined <%= user.dateJoined %></small></p>
+				<% } %>
+			</div>
+		</div>
+		<div class="profile-body">
+			<div class="user-profile-img-div centered">
+				<% if(user.profileImage){ %>
+				<img class="user-profile-img" src="<%= user.profileImage %>" alt="Profile image" onError="this.src = 'https://picsum.photos/800/'" />
+				<% } else { %>
+				<img class="user-profile-img" src="https://picsum.photos/800/" alt="Profile image" onError="this.src = 'https://picsum.photos/800/'" />
+				<% } %>
+			</div>
+
+			<% if(user.username == currentUser.username){ %>
+			<div class="user-profile-text">
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="card">
+							<div class="card-body">
+								<!-- Makes POST request to /users/username route -->
+								<form action="/users/<%= currentUser._id %>" method="POST">
+									<div class="form-group">
+										<label for="profileText" class="dark-secondary-txt">Create/Edit Your Profile Description Here:</label>
+										<textarea type="text" class="form-control" name="profileText" rows="10">
+<% if(!user.profileText){ %>This user has no profile description<% } else { %><%= user.profileText %><% } %></textarea
+										>
+									</div>
+									<button type="submit" class="btn btn-dark">Create Profile Description</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<% } else { %>
+			<div class="user-profile-text">
+				<% if(user.profileText){ %>
+				<h3><%= user.profileText %></h3>
+				<% } else { %>
+				<h3>This user has no profile description.</h3>
+				<% } %>
+			</div>
+			<% } %> <% if(user.username != currentUser.username){ %>
+			<!-- <a href="/about" class="btn follow-user-button">Follow <%= user.username %></a> -->
+			<% } %>
+			<hr />
+			<h3><%= user.username %>'s Posts:</h3>
+			<hr />
+			<div class="row dark-primary-txt">
+				<% if(posts.length) { %> <% for(let i = 0; i < posts.length; i++){ %>
+				<div class="col-lg-3 col-md-6" id="<%= posts[i].id %>">
+					<div class="card post-thumbnail margin-top">
+						<a href="/posts/<%= posts[i].id %>" class="article-link-button">
+							<div class="card-img-container">
+								<% if(!posts[i].image){ %>
+								<img src="https://picsum.photos/800/" class="card-img-top" alt="Cover photo" onError="this.src = 'https://picsum.photos/800/'" />
+								<% } else { %>
+								<img src="<%= posts[i].image %>" class="card-img-top" alt="Cover photo" onError="this.src = 'https://picsum.photos/800/'" />
+								<% } %>
+							</div>
+						</a>
+						<div class="card-body">
+							<h5 class="card-title"><%= posts[i].title %></h5>
+							<a href="/posts/<%= posts[i].id %>" class="btn article-link-button">View Post</a>
+							<% if(currentUser.username == author){ %>
+							<i data-id="<%= posts[i].id %>" class="delete-post margin-left icon-option fas fa-trash-alt"></i>
+							<% } %>
+						</div>
+					</div>
+				</div>
+				<% } %> <% } else { %>
+				<div class="section-header centered">
+					<% if(user.username == currentUser.username){ %>
+					<h2>You don't have any posts. How about you <a href="/create">create one?</a></h2>
+					<% } else { %>
+					<h2>This user doesn't have any posts yet.</h2>
+					<% } %>
+				</div>
+				<% } %>
+			</div>
+		</div>
+	</div>
+	<%- include('partials/footer') -%>
+</div>

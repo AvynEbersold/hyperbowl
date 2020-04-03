@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <% if(locals.title == undefined || locals.title == null){ %>
+    <title>Hyperbowl</title>
+  <% } else { %>
+    <title><%= title %></title>
+  <% } %>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Hyperbowl is a website where you can freely share your story with other people on the platform. Write about whatever you like; fantasy, sci-fi, nonfiction, or just an article. The possibilities are endless.">
+  <meta name="keywords" content="hyperbowl, stories, blog, post, article, community, free">
+
+  <meta name="author" content="Avyn Ebersold">
+
+  <!-- Favicon File Link -->
+  <link rel='icon' href='/icons/favicon.ico' type='image/x-icon'>
+
+  <!-- Initially Loaded Important Stylesheet links -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/styles.css">
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-154889268-1"></script>
+  <!-- Google Adsense -->
+  <script data-ad-client="ca-pub-8234960759619801" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-154889268-1');
+  </script>
+
+</head>
+
+<body>

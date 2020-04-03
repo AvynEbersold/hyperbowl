@@ -1,0 +1,11 @@
+<a href="/" class="sidenav-option sidenav-option-top list-group-item list-group-item-action"><i class="fa-icon fas fa-home"></i><span class="sidebar-text">Dashboard</span></a>
+<a href="/popular" class="sidenav-option list-group-item list-group-item-action"><i class="fa-icon fas fa-fire"></i><span class="sidebar-text">Popular</span></a>
+<a href="/recent" class="sidenav-option list-group-item list-group-item-action"><i class="fa-icon fas fa-clock"></i><span class="sidebar-text">Recent</span></a>
+<a href="/create" class="sidenav-option list-group-item list-group-item-action"><i class="fa-icon fas fa-plus"></i><span class="sidebar-text">Create</span></a>
+<% if(authorized){ %>
+  <a href="/userposts" class="sidenav-option list-group-item list-group-item-action"><i class="fa-icon fas fa-book"></i><span class="sidebar-text">My Posts</span></a>
+  <a href="/userdrafts" class="sidenav-option list-group-item list-group-item-action"><i class="fa-icon fas fa-clipboard"></i><span class="sidebar-text">Drafts</span></a>
+  <a href="/messages" class="sidenav-option list-group-item list-group-item-action"><i class="fa-icon fas fa-paper-plane"></i><span class="sidebar-text">Messages (<span class="inbox-message-number"><%= currentUser.inbox.length%></span>)</span></a>
+<% } %>
+<a href="/feedback" class="sidenav-option list-group-item list-group-item-action"><i class="fa-icon fas fa-comments"></i><span class="sidebar-text">Give Feedback</span></a>
+<a href="/about" class="sidenav-option list-group-item list-group-item-action"><i class="fa-icon fas fa-question"></i><span class="sidebar-text">About</span></a>

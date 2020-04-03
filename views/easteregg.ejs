@@ -1,0 +1,28 @@
+<%- include('partials/metadata'); -%>
+<%- include('partials/header') -%>
+<% if(authorized){ %>
+<%- include('partials/sidebar') %>
+<% } %>
+
+<div class="row">
+  <div class="col-lg-4 centered-div padding-1 margin-top margin-bottom centered">
+    <h1>404. This Page Doesn't Exist.</h1>
+    <p>The page, <script type="text/javascript">document.write(window.location.pathname.toString());</script> that you are trying to access may have been moved or deleted. Here are some suggestions: </p>
+      <ul>
+        <li>Just go <a href="/">home</a> and pretend that this didn't happen.</li>
+        <li>If you typed in the URL, make sure you spelled it right.</li>
+        <li>Try to access this page later. There may be a temporary error.</li>
+      </ul>
+      <p>If you want to look at something else, here are some options:</p>
+      <ul>
+        <li>See the most <a href="/recent">recent posts</a> on Hyperbowl.</li>
+        <li>Look at the most <a href="/popular">popular posts</a> right now.</li>
+      </ul>
+  </div>
+</div>
+<% if(authorized){ %>
+  <small class="float-right"><a href="/messages?messageRecipient=Avyn E.&messageTitle=Easter Egg Completed!&messageBody=Once you send this message you will receive the prize for completing the Easter Egg. Because I don't know the names of all of the people on Hyperbowl, please write your first and last name here: %0A%0A First name:%0A Last name: %0A%0ADo NOT change the verification code below. If you do, your message is invalid.%0A%0AVerification Code: 83gtypFccbPqEGt2pTzm%0A%0AAdditionally, don't tell anyone else about this Easter Egg. If you tell someone else your prize and that of the person you told will both be invalidated. Thanks for participating!"><i class="fas fa-egg"></i></a></small>
+<% } %>
+
+
+<%- include('partials/footer') -%>

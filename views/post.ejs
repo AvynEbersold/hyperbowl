@@ -1,0 +1,164 @@
+<%- include('partials/metadata') -%>
+<%- include('partials/header') -%>
+<% if(authorized){ %>
+<%- include('partials/sidebar') %>
+<% } %>
+
+<div class="main">
+  <div class="post-title-header centered" <% if(post.image){ %>style="
+      background: var(--post-header-bg), url(<%= post.image %>), url(https://picsum.photos/800/);
+      background-attachment: fixed;
+      background-size: cover;
+    " <% } %>>
+    <div class="post-header-text-div">
+      <h1 class="post-header-text"><%= post.title %></h1>
+      <p><% if(post.datePublished){ %>
+        Published <%= post.datePublished %> |
+        <% } %><i class="far fa-eye"></i> <%= post.numberOfViews %></p>
+    </div>
+  </div>
+  <div class="post-author-info centered">
+    <p class="post-author-info-text dark-secondary-txt">Posted By:<img class="post-user-img" src="<%= author.profileImage %>" alt="Profile image" onError="this.src = 'https://picsum.photos/800/'"><a
+        href="/users/<%= author._id %>"><%= author.username %></a></p>
+  </div>
+  <div class="post-body">
+    <% for(let i = 0; i < post.sections.length; i++){ %>
+    <p class="post-text"><%- post.sections[i] %></p>
+    <!-- <div class="full-width post-genres">
+      <p>What genre is this post?</p>
+      <button type="button" name="button" class="btn bordered-txt genre-option no-margin"><b>Fantasty</b></button> (7)<button type="button" name="button" class="btn bordered-txt genre-option">Nonfiction</button> (3)<button type="button" name="button" class=" btn bordered-txt genre-option">Spam</button> (4)
+    </div> -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <ins class="adsbygoogle" style="display:block; text-align:center;" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-8234960759619801" data-ad-slot="9219330305"></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    <% } %>
+    <% if(authorized){ %>
+    <hr class="margin-top margin-bottom">
+    <div class="post-like-div">
+      <div class="post-like-dislike-btn-div">
+        <% if(likedByUser){ %>
+        <i data-id="<%= post.id %>" class="centered-div far fa-2x fa-thumbs-up post-like-btn post-like-dislike-btn" id="liked-disliked-post"></i>
+        <% } else { %>
+        <i data-id="<%= post.id %>" class="centered-div far fa-2x fa-thumbs-up post-like-btn post-like-dislike-btn" id="not-liked-disliked-post"></i>
+        <% } %>
+        <p class="post-like-number"><% if(post.numberOfLikes){ %><%= post.numberOfLikes %><% } else { %>0<% } %></p>
+      </div>
+      <div class="post-like-dislike-btn-div">
+        <% if(dislikedByUser){ %>
+        <i data-id="<%= post.id %>" class="centered-div far fa-2x fa-thumbs-down post-dislike-btn post-like-dislike-btn" id="liked-disliked-post"></i>
+        <% } else { %>
+        <i data-id="<%= post.id %>" class="centered-div far fa-2x fa-thumbs-down post-dislike-btn post-like-dislike-btn" id="not-liked-disliked-post"></i>
+        <% } %>
+        <p class="post-dislike-number"><% if(post.numberOfDislikes){ %><%= post.numberOfDislikes %><% } else { %>0<% } %></p>
+      </div>
+    </div>
+    <% } else { %>
+    <hr class="margin-top margin-bottom">
+    <div class="post-like-div">
+      <div class="post-like-dislike-btn-div">
+        <a href="/register"><i data-id="<%= post.id %>" class="centered-div far fa-2x fa-thumbs-up post-like-dislike-btn" id="not-liked-disliked-post"></i></a>
+        <p class="post-like-number"><% if(post.numberOfLikes){ %><%= post.numberOfLikes %><% } else { %>0<% } %></p>
+      </div>
+      <div class="post-like-dislike-btn-div">
+        <a href="/register"><i data-id="<%= post.id %>" class="centered-div far fa-2x fa-thumbs-down post-like-dislike-btn" id="not-liked-disliked-post"></i></a>
+        <p class="post-like-number"><% if(post.numberOfDislikes){ %><%= post.numberOfDislikes %><% } else { %>0<% } %></p>
+      </div>
+    </div>
+    <% } %>
+    <div class="comments-div dark-secondary-txt">
+      <hr class="margin-bottom">
+      <% if(!authorized){ %>
+      <div class="card alert">
+        <h5 class="card-header">Create an Account to Comment</h5>
+        <div class="card-body">
+          <h5 class="card-title">Start using Hyperbowl</h5>
+          <p class="card-text">With an account on Hyperbowl you can unlock many new advanced capabilities.</p>
+          <a href="/register" class="btn primary-btn">Create an Account</a>
+          <a href="/login" class="btn secondary-btn">Login</a>
+        </div>
+      </div>
+      <% } %>
+      <% if(post.comments.length){ %>
+      <!-- CHECKS FOR NORMAL COMMENTS BECAUSE IF THERE AREN'T ANY THEN derivedComments WAS NEVER DEFINED -->
+      <h3 class="dark-primary-txt">Newest Comments:</h3>
+      <% if(authorized){ %>
+        <% if(derivedComments[derivedComments.length - 1].authorUsername != currentUser.username){ %>
+          <form action="/posts/<%= post.id %>" method="POST">
+            <div class="form-group">
+              <label for="commentContent" class="dark-primary-txt">Your comment:</label>
+              <textarea type="text" class="form-control" name="commentContent" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-dark margin-bottom">Comment</button>
+          </form>
+        <% } else { %>
+          <div class="margin-bottom">
+            <p class="error-txt">You can't comment on this post right now. You cannot comment two times in a row.<br>
+            <small>If you want to comment again, delete your current comment and reload the page.</small></p>
+          </div>
+        <% } %>
+      <% } %>
+      <% } else if(authorized){ %>
+        <form action="/posts/<%= post.id %>" method="POST">
+          <div class="form-group">
+            <label for="commentContent" class="dark-primary-txt">Your comment:</label>
+            <textarea type="text" class="form-control" name="commentContent" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-dark margin-bottom">Comment</button>
+        </form>
+      <% } %>
+      <% if(post.comments.length){ %>
+      <!-- CHECKS FOR NORMAL COMMENTS BECAUSE IF THERE AREN'T ANY THEN derivedComments WAS NEVER DEFINED -->
+      <hr>
+      <div class="user-comments" id="user-comments">
+        <% if(derivedComments.length > 20){ %>
+          <% for(let i = 19; i >= 0; i--){ %>
+          <div class="comment" id="commentdiv-<%= derivedComments[i]._id %>">
+            <div class="comment-user-img-div">
+              <img class="comment-user-img" src="<%= derivedComments[i].authorProfileImage %>" alt="User-image" onError="this.src = 'https://picsum.photos/200/'">
+            </div>
+            <div class="comment-text">
+              <small><a href="/users/<%= derivedComments[i].author %>"><%= derivedComments[i].authorUsername %></a>:
+                <% if(derivedComments[i].datePosted){ %>
+                <small>(<%= derivedComments[i].datePosted %>)</small>
+                <% } %>
+                <% if(currentUser._id) { %>
+                <% if(currentUser._id.toString() == derivedComments[i].author){ %>
+                <span class="comment-delete-btn" data-id="<%= post.id %>" id="<%= derivedComments[i]._id %>">&times;</span>
+                <% } %>
+                <% } %>
+              </small><br>
+              <%= derivedComments[i].content %>
+            </div>
+          </div>
+          <% } %>
+          <button class="btn-dark btn margin-bottom load-more-comments-btn">Show More Comments</button>
+        <% } else { %>
+          <% for(let i = derivedComments.length - 1; i >= 0; i--){ %>
+          <div class="comment" id="commentdiv-<%= derivedComments[i]._id %>">
+            <div class="comment-user-img-div">
+              <img class="comment-user-img" src="<%= derivedComments[i].authorProfileImage %>" alt="User-image" onError="this.src = 'https://picsum.photos/200/'">
+            </div>
+            <div class="comment-text">
+              <small><a href="/users/<%= derivedComments[i].author %>"><%= derivedComments[i].authorUsername %></a>:
+                <% if(derivedComments[i].datePosted){ %>
+                <small>(<%= derivedComments[i].datePosted %>)</small>
+                <% } %>
+                <% if(currentUser._id) { %>
+                <% if(currentUser._id.toString() == derivedComments[i].author){ %>
+                <span class="comment-delete-btn" data-id="<%= post.id %>" id="<%= derivedComments[i]._id %>">&times;</span>
+                <% } %>
+                <% } %>
+              </small><br>
+              <%= derivedComments[i].content %>
+            </div>
+          </div>
+          <% } %>
+        <% } %>
+      </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+<%- include('partials/footer') -%>

@@ -1,0 +1,70 @@
+<%- include('partials/metadata'); -%>
+<%- include('partials/header') -%>
+<%- include('partials/sidebar') -%>
+
+<div class="main">
+  <div class="default-header">
+    <div class="default-header-text-div">
+      <h1 class="default-header-text">Settings</h1>
+    </div>
+  </div>
+  <div class="full-width margin-bottom">
+    <div class="col-lg-6 col-md-10 col-sm-12 centered-div margin-top">
+      <form action="/settings" method="POST" autocomplete="off">
+        <div class="accordion" id="bootstrapAccordion">
+          <div class="card">
+            <div class="card-header" id="headingOne">
+              <h2 class="mb-0">
+                <button class="btn btn-link collapsed secondary-colored-text" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                  Profile Image & Email <i class="margin-left fas fa-chevron-down"></i>
+                </button>
+              </h2>
+            </div>
+
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#bootstrapAccordion">
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="text">Profile Image (URL)</label>
+                  <input type="text" class="form-control" name="userProfileImage" value="<%= currentUser.profileImage %>">
+                </div>
+                <div class="form-group">
+                  <label for="text">Email</label>
+                  <input type="email" class="form-control" name="userEmail" value="<%= currentUser.email %>">
+                </div>
+
+                <button type="submit" class="btn primary-btn">Save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="accordion" id="bootstrapAccordion2">
+          <div class="card">
+            <div class="card-header" id="headingTwo">
+              <h2 class="mb-0">
+                <button class="btn btn-link collapsed secondary-colored-text" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                  Site Styling Preferences <i class="margin-left fas fa-chevron-down"></i>
+                </button>
+              </h2>
+            </div>
+
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#bootstrapAccordion2">
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="text">Profile Background Image (URL)</label>
+                  <input type="text" class="form-control" name="userBackgroundProfileImage" value="<%= currentUser.preferences.styles.profileBackgroundImage %>">
+                </div>
+                <div class="form-group">
+                  <label for="text">Dashboard Background Image (URL)</label>
+                  <input type="text" class="form-control" name="userBackgroundDashboardImage" value="<%= currentUser.preferences.styles.dashboardBackgroundImage %>">
+                </div>
+                <button type="submit" class="btn primary-btn">Save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') -%>
