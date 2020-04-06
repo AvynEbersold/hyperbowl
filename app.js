@@ -44,7 +44,7 @@ app.use(
 	bodyParser.urlencoded({
 		parameterLimit: 100000,
 		limit: '50mb',
-		extended: true
+		extended: true,
 	})
 );
 
@@ -54,7 +54,7 @@ app.use(
 	session({
 		secret: secret,
 		resave: false,
-		saveUninitialized: false
+		saveUninitialized: false,
 	})
 );
 app.use(passport.initialize());
@@ -74,7 +74,7 @@ mongoose.connect('mongodb+srv://admin-avyn:' + key + '@hyperbowldb-wjtx4.mongodb
 const draftSchema = new mongoose.Schema({
 	title: String,
 	image: String,
-	content: String
+	content: String,
 });
 
 const postSchema = new mongoose.Schema({
@@ -92,19 +92,19 @@ const postSchema = new mongoose.Schema({
 		{
 			author: mongoose.Schema.Types.ObjectId,
 			content: String,
-			datePosted: String
-		}
-	]
+			datePosted: String,
+		},
+	],
 });
 
 const userSchema = new mongoose.Schema({
 	email: {
 		type: String,
-		required: true
+		required: true,
 	},
 	username: {
 		type: String,
-		required: true
+		required: true,
 	},
 	password: String,
 	profileImage: String,
@@ -113,11 +113,11 @@ const userSchema = new mongoose.Schema({
 	preferences: {
 		styles: {
 			profileBackgroundImage: String,
-			dashboardBackgroundImage: String
+			dashboardBackgroundImage: String,
 		},
 		email: {
-			subscribed: Boolean
-		}
+			subscribed: Boolean,
+		},
 	},
 	drafts: [mongoose.Schema.Types.ObjectId],
 	posts: [mongoose.Schema.Types.ObjectId],
@@ -129,15 +129,15 @@ const userSchema = new mongoose.Schema({
 			author: String,
 			title: String,
 			content: String,
-			datePosted: String
-		}
-	]
+			datePosted: String,
+		},
+	],
 });
 
 const feedbackSchema = new mongoose.Schema({
 	issue: String,
 	details: String,
-	author: String
+	author: String,
 });
 
 //USE HASHING FROM PASSPORT ON THE USER SCHEMA BY USING THE PASSPORTLOCALMONGOOSE NPM PACKAGE
@@ -171,7 +171,7 @@ passport.deserializeUser(User.deserializeUser());
 app
 	.route('/')
 
-	.get(function(req, res) {
+	.get(function (req, res) {
 		let name;
 		if (req.user && req.isAuthenticated()) {
 			name = req.user;
@@ -179,11 +179,11 @@ app
 			name = 'Guest';
 		}
 		let numOfRecentPostsShown = 12;
-		Post.find({}, function(err, posts) {
+		Post.find({}, function (err, posts) {
 			if (err) {
 				console.log(err);
 			} else {
-				posts.sort(function(a, b) {
+				posts.sort(function (a, b) {
 					return Math.pow(Math.random(), 2) * a.numberOfLikes - Math.pow(Math.random(), 2) * b.numberOfLikes;
 				});
 				let splitPosts = posts;
@@ -194,20 +194,20 @@ app
 					authorized: req.isAuthenticated(),
 					currentUser: name,
 					posts: splitPosts,
-					title: 'Hyperbowl | Home'
+					title: 'Hyperbowl | Home',
 				});
 			}
 		});
 	})
 
-	.post(function(req, res) {
+	.post(function (req, res) {
 		if (req.body.getCause == 'SCROLL') {
 			let numberOfRetrievedPosts = 8;
-			Post.find({}, function(err, posts) {
+			Post.find({}, function (err, posts) {
 				if (err) {
 					console.log(err);
 				} else {
-					posts.sort(function(a, b) {
+					posts.sort(function (a, b) {
 						return Math.pow(Math.random(), 2) * a.numberOfLikes - Math.pow(Math.random(), 2) * b.numberOfLikes;
 					});
 					let slicedPosts = posts.slice(0, posts.length - parseInt(req.body.numberOfPosts));
@@ -219,7 +219,7 @@ app
 			let allowedNumberOfSuggestions = 8;
 			let validPosts = [];
 			let searchContent = _.lowerCase(req.body.searchContent);
-			Post.find({}, function(err, posts) {
+			Post.find({}, function (err, posts) {
 				if (!err) {
 					let i;
 					for (i = 0; i < posts.length; i++) {
@@ -248,16 +248,16 @@ app
 app
 	.route('/posts/:postId')
 
-	.get(function(req, res) {
+	.get(function (req, res) {
 		if (req.isAuthenticated()) {
 			//FIND THE REQUESTED POST AND THE CORRESPONDING AUTHOR
 			let initialNumComments = 21;
-			Post.findById(req.params.postId, function(err, foundPost) {
+			Post.findById(req.params.postId, function (err, foundPost) {
 				if (!err && foundPost) {
 					let comments = foundPost.comments;
 					let post = foundPost;
 
-					User.findById(req.user._id, function(err, foundUser) {
+					User.findById(req.user._id, function (err, foundUser) {
 						if (foundPost.numberOfViews) {
 							let userViewedPost = false;
 							for (let i = 0; i < foundUser.viewedPosts.length; i++) {
@@ -287,7 +287,7 @@ app
 					});
 
 					let name = req.user;
-					User.findById(foundPost.author, function(err, postAuthor) {
+					User.findById(foundPost.author, function (err, postAuthor) {
 						if (!err) {
 							// console.log(comments);
 							//FILTERS THROUGH ALL COMMENT OBJECTS, DERIVING THE NEEDED DETAILS OF THE USER THAT POSTED THE COMMENT AND THEN RENDERING THE POSTS PAGE
@@ -296,7 +296,7 @@ app
 									if (comments.length > initialNumComments) {
 										comments = comments.slice(comments.length - initialNumComments, comments.length);
 									}
-									User.findById(req.user._id, function(err, foundUser) {
+									User.findById(req.user._id, function (err, foundUser) {
 										if (!err) {
 											let userLikedPost = false;
 											let userDislikedPost = false;
@@ -316,7 +316,7 @@ app
 														derivedComments: comments,
 														likedByUser: userLikedPost,
 														dislikedByUser: userDislikedPost,
-														title: post.title + ' | Hyperbowl'
+														title: post.title + ' | Hyperbowl',
 													});
 												}
 											}
@@ -334,7 +334,7 @@ app
 													derivedComments: comments,
 													likedByUser: false,
 													dislikedByUser: userDislikedPost,
-													title: post.title + ' | Hyperbowl'
+													title: post.title + ' | Hyperbowl',
 												});
 											}
 										} else {
@@ -343,7 +343,7 @@ app
 									});
 								}
 
-								const waitFor = ms => new Promise(r => setTimeout(r, ms));
+								const waitFor = (ms) => new Promise((r) => setTimeout(r, ms));
 
 								async function asyncForEach(array, callback) {
 									for (let index = 0; index < array.length; index++) {
@@ -354,14 +354,14 @@ app
 								let editedComments = [];
 								const start = async () => {
 									await asyncForEach(comments, async (comment, index) => {
-										User.findById(comment.author, function(err, foundAuthor) {
+										User.findById(comment.author, function (err, foundAuthor) {
 											editedComments[index] = {
 												_id: comment._id,
 												content: comment.content,
 												author: comment.author,
 												datePosted: comment.datePosted,
 												authorUsername: foundAuthor.username,
-												authorProfileImage: foundAuthor.profileImage
+												authorProfileImage: foundAuthor.profileImage,
 											};
 										});
 										await waitFor(100);
@@ -371,7 +371,7 @@ app
 								};
 								start();
 							} else {
-								User.findById(req.user._id, function(err, foundUser) {
+								User.findById(req.user._id, function (err, foundUser) {
 									if (!err) {
 										let userLikedPost = false;
 										let userDislikedPost = false;
@@ -390,7 +390,7 @@ app
 													post: post,
 													likedByUser: userLikedPost,
 													dislikedByUser: userDislikedPost,
-													title: post.title + ' | Hyperbowl'
+													title: post.title + ' | Hyperbowl',
 												});
 											}
 										}
@@ -407,7 +407,7 @@ app
 												post: post,
 												likedByUser: false,
 												dislikedByUser: userDislikedPost,
-												title: post.title + ' | Hyperbowl'
+												title: post.title + ' | Hyperbowl',
 											});
 										}
 									} else {
@@ -429,10 +429,10 @@ app
 		}
 	})
 
-	.post(function(req, res) {
+	.post(function (req, res) {
 		if (req.body.commentRetrieval == 'TRUE') {
 			let numberOfRetrievedComments = 8;
-			Post.findById(req.params.postId, function(err, foundPost) {
+			Post.findById(req.params.postId, function (err, foundPost) {
 				let post = foundPost;
 				let comments = post.comments.slice(0, post.comments.length - parseInt(req.body.numberOfCurrentComments));
 				comments = comments.splice(comments.length - numberOfRetrievedComments, numberOfRetrievedComments);
@@ -443,18 +443,18 @@ app
 							comments: comments,
 							allComments: parseInt(req.body.numberOfCurrentComments) + numberOfRetrievedComments >= foundPost.comments.length,
 							userIsAuthenticated: true,
-							userId: req.user._id
+							userId: req.user._id,
 						});
 					} else {
 						res.send({
 							comments: comments,
 							allComments: parseInt(req.body.numberOfCurrentComments) + numberOfRetrievedComments >= foundPost.comments.length,
-							userIsAuthenticated: false
+							userIsAuthenticated: false,
 						});
 					}
 				}
 
-				const waitFor = ms => new Promise(r => setTimeout(r, ms));
+				const waitFor = (ms) => new Promise((r) => setTimeout(r, ms));
 
 				async function asyncForEach(array, callback) {
 					for (let index = 0; index < array.length; index++) {
@@ -465,14 +465,14 @@ app
 				let editedComments = [];
 				const start = async () => {
 					await asyncForEach(comments, async (comment, index) => {
-						User.findById(comment.author, function(err, foundAuthor) {
+						User.findById(comment.author, function (err, foundAuthor) {
 							editedComments[index] = {
 								_id: comment._id,
 								content: comment.content,
 								author: comment.author,
 								datePosted: comment.datePosted,
 								authorUsername: foundAuthor.username,
-								authorProfileImage: foundAuthor.profileImage
+								authorProfileImage: foundAuthor.profileImage,
 							};
 						});
 						await waitFor(100);
@@ -485,10 +485,10 @@ app
 			});
 		} else {
 			async function likePost() {
-				const waitFor = ms => new Promise(r => setTimeout(r, ms));
-				Post.findById(req.params.postId, function(err, foundPost) {
+				const waitFor = (ms) => new Promise((r) => setTimeout(r, ms));
+				Post.findById(req.params.postId, function (err, foundPost) {
 					if (!err) {
-						User.findById(req.user._id, function(err, foundUser) {
+						User.findById(req.user._id, function (err, foundUser) {
 							let userLikedPost = postIsLikedDisliked(foundUser.likedPosts);
 							if (!userLikedPost) {
 								if (postIsLikedDisliked(foundUser.dislikedPosts)) {
@@ -519,7 +519,7 @@ app
 										numberOfLikes: foundPost.numberOfLikes,
 										numberOfDislikes: foundPost.numberOfDislikes,
 										userLikedPost: postIsLikedDisliked(foundUser.likedPosts),
-										userDislikedPost: postIsLikedDisliked(foundUser.dislikedPosts)
+										userDislikedPost: postIsLikedDisliked(foundUser.dislikedPosts),
 									});
 								}
 							}
@@ -532,10 +532,10 @@ app
 			}
 
 			async function dislikePost() {
-				const waitFor = ms => new Promise(r => setTimeout(r, ms));
-				Post.findById(req.params.postId, function(err, foundPost) {
+				const waitFor = (ms) => new Promise((r) => setTimeout(r, ms));
+				Post.findById(req.params.postId, function (err, foundPost) {
 					if (!err) {
-						User.findById(req.user._id, function(err, foundUser) {
+						User.findById(req.user._id, function (err, foundUser) {
 							let userDislikedPost = postIsLikedDisliked(foundUser.dislikedPosts);
 							if (!userDislikedPost) {
 								if (postIsLikedDisliked(foundUser.likedPosts)) {
@@ -566,7 +566,7 @@ app
 										numberOfLikes: foundPost.numberOfLikes,
 										numberOfDislikes: foundPost.numberOfDislikes,
 										userLikedPost: postIsLikedDisliked(foundUser.likedPosts),
-										userDislikedPost: postIsLikedDisliked(foundUser.dislikedPosts)
+										userDislikedPost: postIsLikedDisliked(foundUser.dislikedPosts),
 									});
 								}
 							}
@@ -592,7 +592,7 @@ app
 			}
 			if (req.isAuthenticated()) {
 				if (req.body.commentDeletion == 'TRUE') {
-					Post.findById(req.params.postId, function(err, foundPost) {
+					Post.findById(req.params.postId, function (err, foundPost) {
 						if (!err) {
 							for (let i = 0; i < foundPost.comments.length; i++) {
 								// console.log(foundPost.comments[i].author.toString() == req.user._id.toString());
@@ -600,7 +600,7 @@ app
 								if (foundPost.comments[i].author.toString() == req.user._id.toString() && foundPost.comments[i]._id.toString() == req.body.commentId) {
 									console.log("Everything worked. You're good to go.");
 									res.send({
-										deletedCommentId: foundPost.comments[i]._id
+										deletedCommentId: foundPost.comments[i]._id,
 									});
 									foundPost.comments.splice(i, 1);
 									foundPost.save();
@@ -615,7 +615,7 @@ app
 				} else if (req.body.likeType === 'DISLIKE') {
 					dislikePost();
 				} else {
-					Post.findById(req.params.postId, function(err, post) {
+					Post.findById(req.params.postId, function (err, post) {
 						if (!err && post) {
 							//ADD COMMENT TO THE POST OBJECT
 							if (!post.comments.length || post.comments[post.comments.length - 1].author.toString() != req.user._id) {
@@ -624,9 +624,9 @@ app
 									post.comments.push({
 										author: req.user._id,
 										content: req.body.commentContent,
-										datePosted: currentDate.getMonth() + 1 + '/' + currentDate.getDate() + '/' + currentDate.getFullYear()
+										datePosted: currentDate.getMonth() + 1 + '/' + currentDate.getDate() + '/' + currentDate.getFullYear(),
 									});
-									post.save(function(err) {
+									post.save(function (err) {
 										console.log(err);
 									});
 								}
@@ -643,15 +643,15 @@ app
 		}
 	})
 
-	.delete(function(req, res) {
+	.delete(function (req, res) {
 		if (req.isAuthenticated()) {
-			Post.findById(req.params.postId, function(err, foundPost) {
+			Post.findById(req.params.postId, function (err, foundPost) {
 				if (!err) {
 					console.log(req.user._id.toString() == '5e39f3bea0ba040004fa9dfc');
 					if (req.user._id.toString() == foundPost.author.toString() || req.user._id.toString() == '5e39f3bea0ba040004fa9dfc') {
 						foundPost.remove();
 						foundPost.save();
-						User.findById(foundPost.author, function(err, foundUser) {
+						User.findById(foundPost.author, function (err, foundUser) {
 							if (!err) {
 								let userPosts = foundUser.posts;
 								for (let i = 0; i < userPosts.length; i++) {
@@ -679,15 +679,15 @@ app
 
 /////////////////////////////////////////////////////////////////
 
-app.route('/posts/:postId/edit').get(function(req, res) {
+app.route('/posts/:postId/edit').get(function (req, res) {
 	if (req.isAuthenticated()) {
-		Post.findById(req.params.postId, function(err, foundPost) {
+		Post.findById(req.params.postId, function (err, foundPost) {
 			if (!err && foundPost) {
 				let drafts = [];
 				let userDrafts = req.user.drafts;
 				if (userDrafts.length) {
-					userDrafts.forEach(function(draft) {
-						Draft.findById(draft, function(err, foundDraft) {
+					userDrafts.forEach(function (draft) {
+						Draft.findById(draft, function (err, foundDraft) {
 							if (!err) {
 								let draftObject = foundDraft;
 								drafts.push(draftObject);
@@ -700,7 +700,7 @@ app.route('/posts/:postId/edit').get(function(req, res) {
 									currentUser: req.user,
 									post: foundPost,
 									drafts: drafts,
-									title: foundPost.title + ' | Hyperbowl'
+									title: foundPost.title + ' | Hyperbowl',
 								});
 							}
 						});
@@ -711,7 +711,7 @@ app.route('/posts/:postId/edit').get(function(req, res) {
 						currentUser: req.user,
 						post: foundPost,
 						drafts: [],
-						title: foundPost.title + ' | Hyperbowl'
+						title: foundPost.title + ' | Hyperbowl',
 					});
 				}
 			} else {
@@ -726,11 +726,11 @@ app.route('/posts/:postId/edit').get(function(req, res) {
 
 /////////////////////////////////////////////////////////////////
 
-app.route('/posts/:postId/adddraft/:draftId').post(function(req, res) {
+app.route('/posts/:postId/adddraft/:draftId').post(function (req, res) {
 	if (req.isAuthenticated()) {
-		Post.findById(req.params.postId, function(err, foundPost) {
+		Post.findById(req.params.postId, function (err, foundPost) {
 			if (req.user._id.toString() == foundPost.author) {
-				Draft.findById(req.params.draftId, function(err, foundDraft) {
+				Draft.findById(req.params.draftId, function (err, foundDraft) {
 					foundPost.sections.push(foundDraft.content);
 					foundPost.save();
 					res.redirect('/posts/' + req.params.postId + '/edit');
@@ -749,10 +749,10 @@ app.route('/posts/:postId/adddraft/:draftId').post(function(req, res) {
 app
 	.route('/drafts/:draftId')
 
-	.get(function(req, res) {
+	.get(function (req, res) {
 		//FIND THE REQUESTED POST AND THE CORRESPONDING AUTHOR
 		if (req.isAuthenticated()) {
-			Draft.findById(req.params.draftId, function(err, draft) {
+			Draft.findById(req.params.draftId, function (err, draft) {
 				if (!err) {
 					let name;
 					if (req.user) {
@@ -764,7 +764,7 @@ app
 						authorized: true,
 						currentUser: name,
 						draft: draft,
-						title: draft.title + ' | Hyperbowl'
+						title: draft.title + ' | Hyperbowl',
 					});
 				} else {
 					console.log(err);
@@ -775,13 +775,13 @@ app
 		}
 	})
 
-	.delete(function(req, res) {
+	.delete(function (req, res) {
 		if (req.isAuthenticated()) {
-			Draft.findById(req.params.draftId, function(err, foundDraft) {
+			Draft.findById(req.params.draftId, function (err, foundDraft) {
 				if (!err) {
 					foundDraft.remove();
 					foundDraft.save();
-					User.findById(req.user._id, function(err, foundUser) {
+					User.findById(req.user._id, function (err, foundUser) {
 						if (!err) {
 							let userDrafts = foundUser.drafts;
 							for (let i = 0; i < userDrafts.length; i++) {
@@ -809,16 +809,16 @@ app
 app
 	.route('/users/:userId')
 
-	.get(function(req, res) {
+	.get(function (req, res) {
 		if (req.isAuthenticated()) {
-			User.findById(req.params.userId, function(err, foundUser) {
+			User.findById(req.params.userId, function (err, foundUser) {
 				if (!err) {
 					let name = req.user;
 					let posts = [];
 					let userPosts = foundUser.posts;
 					if (userPosts.length) {
-						userPosts.forEach(function(post) {
-							Post.findById(post, function(err, foundPost) {
+						userPosts.forEach(function (post) {
+							Post.findById(post, function (err, foundPost) {
 								if (!err) {
 									let postObject = foundPost;
 									posts.push(postObject);
@@ -832,7 +832,7 @@ app
 										user: foundUser,
 										posts: posts,
 										author: foundUser.username,
-										title: foundUser.username + ' | Hyperbowl'
+										title: foundUser.username + ' | Hyperbowl',
 									});
 								}
 							});
@@ -843,7 +843,7 @@ app
 							currentUser: name,
 							user: foundUser,
 							posts: [],
-							title: foundUser.username + ' | Hyperbowl'
+							title: foundUser.username + ' | Hyperbowl',
 						});
 					}
 				} else {
@@ -855,9 +855,9 @@ app
 		}
 	})
 
-	.post(function(req, res) {
+	.post(function (req, res) {
 		if (req.isAuthenticated() && req.user._id == req.params.userId) {
-			User.findById(req.params.userId, function(err, foundUser) {
+			User.findById(req.params.userId, function (err, foundUser) {
 				foundUser.profileText = req.body.profileText;
 				foundUser.save();
 				res.redirect('/users/' + req.params.userId);
@@ -869,16 +869,16 @@ app
 
 /////////////////////////////////////////////////////////////////
 
-app.route('/userposts').get(function(req, res) {
+app.route('/userposts').get(function (req, res) {
 	if (req.isAuthenticated()) {
 		name = req.user;
 		let posts = [];
-		User.findById(req.user._id, function(err, foundUser) {
+		User.findById(req.user._id, function (err, foundUser) {
 			if (!err) {
 				let userPosts = foundUser.posts;
 				if (userPosts.length) {
-					userPosts.forEach(function(post) {
-						Post.findById(post, function(err, foundPost) {
+					userPosts.forEach(function (post) {
+						Post.findById(post, function (err, foundPost) {
 							if (!err) {
 								let postObject = foundPost;
 								posts.push(postObject);
@@ -891,7 +891,7 @@ app.route('/userposts').get(function(req, res) {
 									currentUser: name,
 									posts: posts,
 									author: foundUser.username,
-									title: foundUser.username + "'s Posts | Hyperbowl"
+									title: foundUser.username + "'s Posts | Hyperbowl",
 								});
 							}
 						});
@@ -902,7 +902,7 @@ app.route('/userposts').get(function(req, res) {
 						currentUser: name,
 						posts: [],
 						author: foundUser.username,
-						title: foundUser.username + "'s Posts | Hyperbowl"
+						title: foundUser.username + "'s Posts | Hyperbowl",
 					});
 				}
 			} else {
@@ -919,13 +919,13 @@ app.route('/userposts').get(function(req, res) {
 app
 	.route('/userdrafts')
 
-	.get(function(req, res) {
+	.get(function (req, res) {
 		if (req.isAuthenticated()) {
 			var drafts = [];
 			var userDrafts = req.user.drafts;
 			if (userDrafts.length) {
-				userDrafts.forEach(function(draft) {
-					Draft.findById(draft, function(err, foundDraft) {
+				userDrafts.forEach(function (draft) {
+					Draft.findById(draft, function (err, foundDraft) {
 						if (!err) {
 							let draftObject = foundDraft;
 							drafts.push(draftObject);
@@ -937,7 +937,7 @@ app
 								authorized: true,
 								currentUser: req.user,
 								drafts: drafts,
-								title: 'My Drafts | Hyperbowl'
+								title: 'My Drafts | Hyperbowl',
 							});
 						}
 					});
@@ -947,7 +947,7 @@ app
 					authorized: true,
 					currentUser: req.user,
 					drafts: [],
-					title: 'My Drafts | Hyperbowl'
+					title: 'My Drafts | Hyperbowl',
 				});
 			}
 		} else {
@@ -955,12 +955,12 @@ app
 		}
 	})
 
-	.post(function(req, res) {
+	.post(function (req, res) {
 		if (req.isAuthenticated()) {
 			// FINDS USER ASSOSIATED WITH DRAFT. THEN, USES LOGIC TO DETERMINE IF DRAFT IS ORIGINAL. IF IT IS,
 			// ASSIGN NEW DRAFT OBJECT TO DRAFTS COLLECTION AND ADD THE ID TO THE ARRAY THAT THE USER HAS. IF NOT,
 			// REPLACE THE VALUES OF THE CURRENT DRAFT WITH THE ONES JUST WRITTEN
-			User.findById(req.user._id, function(err, foundUser) {
+			User.findById(req.user._id, function (err, foundUser) {
 				if (!err) {
 					if (req.body.originalPost == 'true') {
 						let newDraft;
@@ -968,13 +968,13 @@ app
 							newDraft = new Draft({
 								title: req.body.postTitle + ' | Section ' + req.body.sectionNumber,
 								image: req.body.postImage,
-								content: req.body.postContent
+								content: req.body.postContent,
 							});
 						} else {
 							newDraft = new Draft({
 								title: req.body.postTitle,
 								image: req.body.postImage,
-								content: req.body.postContent
+								content: req.body.postContent,
 							});
 						}
 						newDraft.save();
@@ -982,7 +982,7 @@ app
 						foundUser.save();
 						res.send({ status: 200 });
 					} else {
-						Draft.findById(req.body.draftId, function(err, draft) {
+						Draft.findById(req.body.draftId, function (err, draft) {
 							if (!err) {
 								draft.title = req.body.postTitle;
 								draft.image = req.body.postImage;
@@ -1007,21 +1007,21 @@ app
 app
 	.route('/create')
 
-	.get(function(req, res) {
+	.get(function (req, res) {
 		if (req.isAuthenticated()) {
 			res.render('create', {
 				authorized: true,
 				currentUser: req.user,
-				title: 'Create New | Hyperbowl'
+				title: 'Create New | Hyperbowl',
 			});
 		} else {
 			res.redirect('/register');
 		}
 	})
 
-	.post(function(req, res) {
+	.post(function (req, res) {
 		let currentDate = new Date();
-		User.findById(req.user._id, function(err, foundUser) {
+		User.findById(req.user._id, function (err, foundUser) {
 			if (!err) {
 				const newPost = new Post({
 					title: req.body.postTitle,
@@ -1030,7 +1030,7 @@ app
 					authorUsername: req.user.username,
 					datePublished: currentDate.getMonth() + 1 + '/' + currentDate.getDate() + '/' + currentDate.getFullYear(),
 					numberOfLikes: 0,
-					numberOfViews: 0
+					numberOfViews: 0,
 				});
 				newPost.sections[0] = req.body.postContent;
 				newPost.save();
@@ -1045,9 +1045,9 @@ app
 
 /////////////////////////////////////////////////////////////////
 
-app.route('/updatepost/:postId').post(function(req, res) {
+app.route('/updatepost/:postId').post(function (req, res) {
 	if (req.isAuthenticated()) {
-		Post.findById(req.params.postId, function(err, foundPost) {
+		Post.findById(req.params.postId, function (err, foundPost) {
 			if (req.user._id.toString() == foundPost.author) {
 				foundPost.title = req.body.postTitle;
 				foundPost.image = req.body.postImage;
@@ -1070,7 +1070,7 @@ app.route('/updatepost/:postId').post(function(req, res) {
 app
 	.route('/messages')
 
-	.get(function(req, res) {
+	.get(function (req, res) {
 		if (req.isAuthenticated()) {
 			let messages = req.user.inbox;
 			if (messages.length) {
@@ -1094,11 +1094,11 @@ app
 						messageTitle: messageTitle,
 						messageBody: messageBody,
 						title: 'Messages | Hyperbowl',
-						messages: derivedMessages
+						messages: derivedMessages,
 					});
 				}
 
-				const waitFor = ms => new Promise(r => setTimeout(r, ms));
+				const waitFor = (ms) => new Promise((r) => setTimeout(r, ms));
 
 				async function asyncForEach(array, callback) {
 					for (let index = 0; index < array.length; index++) {
@@ -1109,7 +1109,7 @@ app
 				const start = async () => {
 					let derivedMessage;
 					await asyncForEach(messages, async (message, index) => {
-						User.findById(message.author, function(err, foundUser) {
+						User.findById(message.author, function (err, foundUser) {
 							derivedMessage = message;
 							derivedMessage.authorUsername = foundUser.username;
 							derivedMessage.authorProfileImage = foundUser.profileImage;
@@ -1141,7 +1141,7 @@ app
 					messageTitle: messageTitle,
 					messageBody: messageBody,
 					title: 'Messages | Hyperbowl',
-					messages: req.user.inbox
+					messages: req.user.inbox,
 				});
 			}
 		} else {
@@ -1149,10 +1149,10 @@ app
 		}
 	})
 
-	.post(function(req, res) {
+	.post(function (req, res) {
 		if (req.body.messageDeletion == 'TRUE') {
 			if (req.isAuthenticated()) {
-				User.findById(req.user._id, function(err, foundUser) {
+				User.findById(req.user._id, function (err, foundUser) {
 					if (!err) {
 						for (let i = 0; i < foundUser.inbox.length; i++) {
 							console.log(foundUser.inbox[i]._id.toString());
@@ -1174,9 +1174,9 @@ app
 			if (req.isAuthenticated()) {
 				User.findOne(
 					{
-						username: req.body.messageRecipient
+						username: req.body.messageRecipient,
 					},
-					function(err, foundUser) {
+					function (err, foundUser) {
 						if (!err && foundUser) {
 							//ADD COMMENT TO THE POST OBJECT
 							const currentDate = new Date();
@@ -1184,17 +1184,17 @@ app
 								author: req.user._id,
 								title: req.body.messageTitle,
 								content: req.body.messageContent,
-								datePosted: currentDate.getMonth() + 1 + '/' + currentDate.getDate() + '/' + currentDate.getFullYear()
+								datePosted: currentDate.getMonth() + 1 + '/' + currentDate.getDate() + '/' + currentDate.getFullYear(),
 							});
-							foundUser.save(function(err) {
+							foundUser.save(function (err) {
 								console.log(err);
 							});
 							res.send({
-								currentUserUsername: req.user.username
+								currentUserUsername: req.user.username,
 							});
 						} else {
 							res.send({
-								error: 'The username you entered was invalid.'
+								error: 'The username you entered was invalid.',
 							});
 							console.log(err);
 						}
@@ -1211,21 +1211,21 @@ const mailchimpKey = process.env.MAILCHIMP_KEY;
 app
 	.route('/newsletter')
 
-	.get(function(req, res) {
+	.get(function (req, res) {
 		if (req.isAuthenticated()) {
 			res.render('newsletter', {
 				title: 'Hyperbowl | Newsletter',
 				currentUser: req.user,
-				authorized: req.isAuthenticated()
+				authorized: req.isAuthenticated(),
 			});
 		} else {
 			res.redirect('/register');
 		}
 	})
 
-	.post(function(req, res) {
+	.post(function (req, res) {
 		if (req.isAuthenticated()) {
-			User.findById(req.user._id, function(err, foundUser) {
+			User.findById(req.user._id, function (err, foundUser) {
 				const firstName = req.body.fName;
 				const lastName = req.body.lName;
 				const email = foundUser.email;
@@ -1239,11 +1239,11 @@ app
 								status: 'subscribed',
 								merge_fields: {
 									FNAME: firstName,
-									LNAME: lastName
-								}
-							}
+									LNAME: lastName,
+								},
+							},
 						],
-						update_existing: true
+						update_existing: true,
 					};
 				} else {
 					data = {
@@ -1253,10 +1253,10 @@ app
 								status: 'subscribed',
 								merge_fields: {
 									FNAME: firstName,
-									LNAME: lastName
-								}
-							}
-						]
+									LNAME: lastName,
+								},
+							},
+						],
 					};
 				}
 
@@ -1265,10 +1265,10 @@ app
 				const url = 'https://us4.api.mailchimp.com/3.0/lists/ddac505e7d';
 				const options = {
 					method: 'POST',
-					auth: mailchimpKey
+					auth: mailchimpKey,
 				};
-				const request = https.request(url, options, function(response) {
-					response.on('data', function(data) {
+				const request = https.request(url, options, function (response) {
+					response.on('data', function (data) {
 						let parsedJSON = JSON.parse(data);
 						if (!parsedJSON.errors[0]) {
 							foundUser.preferences.email.subscribed = true;
@@ -1288,19 +1288,19 @@ app
 
 /////////////////////////////////////////////////////////////////
 
-app.post('/unsubscribe', function(req, res) {
+app.post('/unsubscribe', function (req, res) {
 	if (req.isAuthenticated()) {
-		User.findById(req.user._id, function(err, foundUser) {
+		User.findById(req.user._id, function (err, foundUser) {
 			const email = foundUser.email;
 
 			const data = {
 				members: [
 					{
 						email_address: email,
-						status: 'unsubscribed'
-					}
+						status: 'unsubscribed',
+					},
 				],
-				update_existing: true
+				update_existing: true,
 			};
 
 			var jsonData = JSON.stringify(data);
@@ -1308,10 +1308,10 @@ app.post('/unsubscribe', function(req, res) {
 			const url = 'https://us4.api.mailchimp.com/3.0/lists/ddac505e7d';
 			const options = {
 				method: 'POST',
-				auth: mailchimpKey
+				auth: mailchimpKey,
 			};
-			const request = https.request(url, options, function(response) {
-				response.on('data', function(data) {
+			const request = https.request(url, options, function (response) {
+				response.on('data', function (data) {
 					let parsedJSON = JSON.parse(data);
 					if (!parsedJSON.errors[0]) {
 						foundUser.preferences.email.subscribed = false;
@@ -1334,27 +1334,27 @@ app.post('/unsubscribe', function(req, res) {
 app
 	.route('/feedback')
 
-	.get(function(req, res) {
+	.get(function (req, res) {
 		if (req.isAuthenticated()) {
 			let username = req.user;
 			res.render('feedback', {
 				authorized: req.isAuthenticated(),
 				currentUser: username,
-				title: 'Give Feedback | Hyperbowl'
+				title: 'Give Feedback | Hyperbowl',
 			});
 		} else {
 			res.redirect('/register');
 		}
 	})
 
-	.post(function(req, res) {
+	.post(function (req, res) {
 		if (req.isAuthenticated()) {
 			const newFeedback = new Feedback({
 				issue: req.body.issue,
 				details: req.body.details,
-				author: req.user.username
+				author: req.user.username,
 			});
-			newFeedback.save(function(err) {
+			newFeedback.save(function (err) {
 				if (err) {
 					console.log(err);
 				} else {
@@ -1372,7 +1372,7 @@ app
 app
 	.route('/login')
 
-	.get(function(req, res) {
+	.get(function (req, res) {
 		if (req.isAuthenticated()) {
 			res.redirect('/');
 		} else {
@@ -1388,21 +1388,21 @@ app
 				authorized: req.isAuthenticated(),
 				title: 'Login to Hyperbowl',
 				username: username,
-				error: error
+				error: error,
 			});
 		}
 	})
 
-	.post(function(req, res) {
+	.post(function (req, res) {
 		const user = new User({
 			username: req.body.username,
-			password: req.body.password
+			password: req.body.password,
 		});
 
 		passport.authenticate('local', {
 			successRedirect: '/',
-			failureRedirect: '/login?username=' + req.body.username + '&error=Invalid+username+or+password.'
-		})(req, res, function() {
+			failureRedirect: '/login?username=' + req.body.username + '&error=Invalid+username+or+password.',
+		})(req, res, function () {
 			res.redirect('/');
 		});
 	});
@@ -1412,7 +1412,7 @@ app
 app
 	.route('/register')
 
-	.get(function(req, res) {
+	.get(function (req, res) {
 		if (req.isAuthenticated()) {
 			res.redirect('/');
 		} else {
@@ -1433,12 +1433,12 @@ app
 				title: 'Register to Hyperbowl',
 				username: username,
 				email: email,
-				error: error
+				error: error,
 			});
 		}
 	})
 
-	.post(function(req, res) {
+	.post(function (req, res) {
 		let currentDate = new Date();
 		const username = req.body.username;
 		//CHECK FOR SPACES IN USERNAMES AND GIVE ERROR IF ONE EXISTS
@@ -1453,18 +1453,18 @@ app
 						username: username,
 						email: req.body.email,
 						profileImage: req.body.profileImage,
-						dateJoined: currentDate.getMonth() + 1 + '/' + currentDate.getDate() + '/' + currentDate.getFullYear()
+						dateJoined: currentDate.getMonth() + 1 + '/' + currentDate.getDate() + '/' + currentDate.getFullYear(),
 					},
 					req.body.password,
-					function(err, user) {
+					function (err, user) {
 						if (err) {
 							console.log(err);
 							res.redirect('/register');
 						} else {
 							passport.authenticate('local', {
 								successRedirect: '/',
-								failureRedirect: '/register?username=' + req.body.username + '&email=' + req.body.email + '&error=Invalid+form+fields.'
-							})(req, res, function() {
+								failureRedirect: '/register?username=' + req.body.username + '&email=' + req.body.email + '&error=Invalid+form+fields.',
+							})(req, res, function () {
 								res.redirect('/');
 							});
 						}
@@ -1479,22 +1479,22 @@ app
 app
 	.route('/popular')
 
-	.get(function(req, res) {
+	.get(function (req, res) {
 		if (req.isAuthenticated()) {
 			let numOfRecentPostsShown = 12;
 			let renderedPosts = [];
 			let name = req.user;
-			Post.find({}, function(err, posts) {
+			Post.find({}, function (err, posts) {
 				if (err) {
 					console.log(err);
 				} else {
-					mappedPosts = posts.map(function(el, i) {
+					mappedPosts = posts.map(function (el, i) {
 						let mappedPost = el;
 						mappedPost.index = i;
 						mappedPost.value = posts[i].numberOfLikes * (posts[i].numberOfLikes / posts[i].numberOfViews) + 1;
 						return mappedPost;
 					});
-					mappedPosts.sort(function(a, b) {
+					mappedPosts.sort(function (a, b) {
 						// return (a.value + (0.1 * (a.index + 1))) - (b.value + (0.1 * (b.index + 1)));
 						if (!a.value) {
 							a.value = 0;
@@ -1514,7 +1514,7 @@ app
 						authorized: req.isAuthenticated(),
 						currentUser: name,
 						posts: splitPosts,
-						title: 'Popular Posts | Hyperbowl'
+						title: 'Popular Posts | Hyperbowl',
 					});
 				}
 			});
@@ -1523,20 +1523,20 @@ app
 		}
 	})
 
-	.post(function(req, res) {
+	.post(function (req, res) {
 		if (req.body.getCause == 'SCROLL') {
 			let numberOfRetrievedPosts = 8;
-			Post.find({}, function(err, posts) {
+			Post.find({}, function (err, posts) {
 				if (err) {
 					console.log(err);
 				} else {
-					mappedPosts = posts.map(function(el, i) {
+					mappedPosts = posts.map(function (el, i) {
 						let mappedPost = el;
 						mappedPost.index = i;
 						mappedPost.value = posts[i].numberOfLikes * (posts[i].numberOfLikes / posts[i].numberOfViews) + 1;
 						return mappedPost;
 					});
-					mappedPosts.sort(function(a, b) {
+					mappedPosts.sort(function (a, b) {
 						// return (a.value + (0.1 * (a.index + 1))) - (b.value + (0.1 * (b.index + 1)));
 						if (!a.value) {
 							a.value = 0;
@@ -1559,11 +1559,11 @@ app
 app
 	.route('/recent')
 
-	.get(function(req, res) {
+	.get(function (req, res) {
 		if (req.isAuthenticated()) {
 			let numOfRecentPostsShown = 12;
 			let name = req.user;
-			Post.find({}, function(err, posts) {
+			Post.find({}, function (err, posts) {
 				if (err) {
 					console.log(err);
 				} else {
@@ -1575,7 +1575,7 @@ app
 						authorized: req.isAuthenticated(),
 						currentUser: name,
 						posts: splitPosts,
-						title: 'Recent Posts | Hyperbowl'
+						title: 'Recent Posts | Hyperbowl',
 					});
 				}
 			});
@@ -1584,10 +1584,10 @@ app
 		}
 	})
 
-	.post(function(req, res) {
+	.post(function (req, res) {
 		if (req.body.getCause == 'SCROLL') {
 			let numberOfRetrievedPosts = 8;
-			Post.find({}, function(err, posts) {
+			Post.find({}, function (err, posts) {
 				if (err) {
 					console.log(err);
 				} else {
@@ -1601,13 +1601,13 @@ app
 
 /////////////////////////////////////////////////////////////////
 
-app.get('/about', function(req, res) {
+app.get('/about', function (req, res) {
 	if (req.isAuthenticated()) {
 		let name = req.user;
 		res.render('about', {
 			authorized: req.isAuthenticated(),
 			currentUser: name,
-			title: 'About | Hyperbowl'
+			title: 'About | Hyperbowl',
 		});
 	} else {
 		res.redirect('/register');
@@ -1619,12 +1619,12 @@ app.get('/about', function(req, res) {
 app
 	.route('/settings')
 
-	.get(function(req, res) {
+	.get(function (req, res) {
 		if (req.isAuthenticated()) {
 			res.render('usersettings', {
 				authorized: true,
 				currentUser: req.user,
-				title: req.user.username + "'s Settings | Hyperbowl"
+				title: req.user.username + "'s Settings | Hyperbowl",
 			});
 		} else {
 			//REDIRECTING TO LOGIN IS INTENTIONAL. IF THE USER IS ON THE PAGE BUT ISN'T LOGGED IN, IT'S BECAUSE THEIR SESSION LIKELY TIMED OUT. THEY ALREADY WILL HAVE AN ACCOUNT.
@@ -1632,9 +1632,9 @@ app
 		}
 	})
 
-	.post(function(req, res) {
+	.post(function (req, res) {
 		if (req.isAuthenticated()) {
-			User.findById(req.user._id, function(err, foundUser) {
+			User.findById(req.user._id, function (err, foundUser) {
 				if (err) {
 					console.log(err);
 				} else {
@@ -1652,7 +1652,7 @@ app
 
 /////////////////////////////////////////////////////////////////
 
-app.get('/logout', function(req, res) {
+app.get('/logout', function (req, res) {
 	if (req.isAuthenticated()) {
 		req.logout();
 	}
@@ -1661,7 +1661,7 @@ app.get('/logout', function(req, res) {
 
 /////////////////////////////////////////////////////////////////
 
-app.get(['/noteasteregg', '/NOTEASTEREGG'], function(req, res) {
+app.get(['/noteasteregg', '/NOTEASTEREGG'], function (req, res) {
 	let name;
 	if (req.user && req.isAuthenticated()) {
 		name = req.user;
@@ -1671,7 +1671,7 @@ app.get(['/noteasteregg', '/NOTEASTEREGG'], function(req, res) {
 	res.render('easteregg', {
 		authorized: req.isAuthenticated(),
 		currentUser: name,
-		title: 'Easter Egg | Hyperbowl'
+		title: 'Easter Egg | Hyperbowl',
 	});
 });
 
@@ -1679,7 +1679,7 @@ app.get(['/noteasteregg', '/NOTEASTEREGG'], function(req, res) {
 
 //GET 404 ERRORS
 
-app.get('*', function(req, res, next) {
+app.get('*', function (req, res, next) {
 	let name;
 	if (req.user && req.isAuthenticated()) {
 		name = req.user;
@@ -1689,7 +1689,7 @@ app.get('*', function(req, res, next) {
 	res.status(404).render('404', {
 		authorized: req.isAuthenticated(),
 		currentUser: name,
-		title: 'Hyperbowl | 404'
+		title: 'Hyperbowl | 404',
 	});
 });
 
@@ -1704,6 +1704,6 @@ if (port == null || port == '') {
 //
 // https.createServer(options, app).listen(443);
 
-app.listen(port, function() {
+app.listen(port, function () {
 	console.log('Server started successfully.');
 });

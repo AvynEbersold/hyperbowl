@@ -48,16 +48,16 @@ $(document).ready(function () {
 							postHTML += '<a href="/posts/' + data[i]._id + '" class="btn article-link-button margin-top">Visit Article</a>';
 							$('.post-thumbnail-section').append(postHTML);
 							if ($('.post-thumbnail').length % 16 == 0) {
-								$('.post-thumbnail-section').append(`<div class="col-12">
-                <div class="ad centered margin-bottom margin-top">
-                  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-                  <!-- Dashboard Row Ad -->
-                  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8234960759619801" data-ad-slot="2978351432" data-ad-format="auto" data-full-width-responsive="true"></ins>
-                  <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                  </script>
-                </div>
-              </div>`);
+								$('.post-thumbnail-section').append(`<div class="col-lg-3 col-md-6"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+								<ins class="adsbygoogle"
+									 style="display:block"
+									 data-ad-format="fluid"
+									 data-ad-layout-key="-5r+dg+43-5m+3f"
+									 data-ad-client="ca-pub-8234960759619801"
+									 data-ad-slot="9087250167"></ins>
+								<script>
+									 (adsbygoogle = window.adsbygoogle || []).push({});
+								</script></div>`);
 							}
 						}
 						sendingRequest = false;
