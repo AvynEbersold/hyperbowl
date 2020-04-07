@@ -46,8 +46,11 @@ $(document).ready(function () {
 							previewSpan.innerHTML = data[i].sections[0].trim();
 							postHTML += '<span>' + previewSpan.textContent.substring(0, 120) + '</span>';
 							postHTML += '<a href="/posts/' + data[i]._id + '" class="btn article-link-button margin-top">Visit Article</a>';
+							if ($('#user-admin-status').text() == 'true') {
+								postHTML += `<i data-id="<%= posts[i].id %>" class="full-width btn delete-post icon-option fas fa-trash-alt"></i>`;
+							}
 							$('.post-thumbnail-section').append(postHTML);
-							if ($('.post-thumbnail').length % 16 == 0) {
+							if ($('.post-thumbnail').length % 16 == 0 && $('#user-admin-status').text() != 'true') {
 								$('.post-thumbnail-section').append(`<div class="col-lg-3 col-md-6"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 								<ins class="adsbygoogle"
 									 style="display:block"

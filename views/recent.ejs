@@ -1,63 +1,49 @@
-<%- include('partials/metadata') -%>
-<%- include('partials/header') -%>
-<% if(authorized){ %>
-  <%- include('partials/sidebar') %>
-<% } %>
+<%- include('partials/metadata') -%> <%- include('partials/header') -%> <% if(authorized){ %> <%- include('partials/sidebar') %> <% } %>
+
+<span style="display: none;" id="user-admin-status"><%= currentUser.isAdmin %></span>
 
 <div class="default-header">
-  <div class="default-header-text-div">
-    <h1 class="default-header-text">Recently Created Posts</h1>
-    <p>See the newest posts on Hyperbowl:</p>
-  </div>
+	<div class="default-header-text-div">
+		<h1 class="default-header-text">Recently Created Posts</h1>
+		<p>See the newest posts on Hyperbowl:</p>
+	</div>
 </div>
 <div class="row post-thumbnail-section margin-top">
-  <% for(let i = posts.length - 1; i > posts.length - (posts.length + 1); i--){ %>
-  <div class="col-lg-3 col-md-6">
-    <div class="card post-thumbnail" id="<%= posts[i]._id %>">
-      <a href="/posts/<%= posts[i].id %>" class="article-link-button">
-        <div class="card-img-container">
-          <% if(!posts[i].image){ %>
-            <img src="https://picsum.photos/600/" class="card-img-top" alt="Cover photo" onError="this.src = 'https://picsum.photos/800/'">
-          <% } else { %>
-            <img src="<%= posts[i].image %>" class="card-img-top" alt="Cover photo" onError="this.src = 'https://picsum.photos/800/'">
-          <% } %>
-        </div>
-      </a>
-      <hr class="nomargin-line">
-      <div class="card-body">
-        <h5 class="card-title"><%= posts[i].title %></h5>
-        <p class="card-text">Posted By: <a href="/users/<%= posts[i].author %>"><%= posts[i].authorUsername %></a>
-          <% if(posts[i].datePublished){ %>
-            | <%= posts[i].datePublished %>
-          <% } %> | <span class="bordered-txt"><i class="far fa-thumbs-up"></i> <%= posts[i].numberOfLikes %></span> <span class="bordered-txt"><i class="far fa-eye"></i> <%= posts[i].numberOfViews %></span></p>
-          <span id="postPreview<%= i %>" style="display: none;"><%- posts[i].sections[0] %></span>
-          <script type="text/javascript">
-            var content = document.getElementById("postPreview<%= i %>");
-            var textContent = content.textContent;
-            var preview = textContent.substring(0, 120);
-            content.style.display = "inline";
-            content.innerHTML = preview + "...";
-          </script>
-          <a href="/posts/<%= posts[i].id %>" class="btn article-link-button margin-top">Visit Article</a>
-        <% if(currentUser._id == "5e39f3bea0ba040004fa9dfc"){ %>
-          <i data-id="<%= posts[i].id %>" class="full-width btn delete-post icon-option fas fa-trash-alt"></i>
-        <% } %>
-      </div>
-    </div>
-  </div>
-  <% if((posts.length - i) % 16 == 0){ %>
-    <div class="col-12">
-      <div class="ad centered margin-bottom margin-top">
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-        <!-- Dashboard Row Ad -->
-        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8234960759619801" data-ad-slot="2978351432" data-ad-format="auto" data-full-width-responsive="true"></ins>
-        <script>
-          (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-      </div>
-    </div>
-  <% } %>
-  <% } %>
+	<% for(let i = posts.length - 1; i > posts.length - (posts.length + 1); i--){ %>
+	<div class="col-lg-3 col-md-6">
+		<div class="card post-thumbnail" id="<%= posts[i]._id %>">
+			<a href="/posts/<%= posts[i].id %>" class="article-link-button">
+				<div class="card-img-container">
+					<% if(!posts[i].image){ %>
+					<img src="https://picsum.photos/600/" class="card-img-top" alt="Cover photo" onError="this.src = 'https://picsum.photos/800/'" />
+					<% } else { %>
+					<img src="<%= posts[i].image %>" class="card-img-top" alt="Cover photo" onError="this.src = 'https://picsum.photos/800/'" />
+					<% } %>
+				</div>
+			</a>
+			<hr class="nomargin-line" />
+			<div class="card-body">
+				<h5 class="card-title"><%= posts[i].title %></h5>
+				<p class="card-text">
+					Posted By: <a href="/users/<%= posts[i].author %>"><%= posts[i].authorUsername %></a> <% if(posts[i].datePublished){ %> | <%= posts[i].datePublished %> <% } %> |
+					<span class="bordered-txt"><i class="far fa-thumbs-up"></i> <%= posts[i].numberOfLikes %></span> <span class="bordered-txt"><i class="far fa-eye"></i> <%= posts[i].numberOfViews %></span>
+				</p>
+				<span id="postPreview<%= i %>" style="display: none;"><%- posts[i].sections[0] %></span>
+				<script type="text/javascript">
+					var content = document.getElementById('postPreview<%= i %>');
+					var textContent = content.textContent;
+					var preview = textContent.substring(0, 120);
+					content.style.display = 'inline';
+					content.innerHTML = preview + '...';
+				</script>
+				<a href="/posts/<%= posts[i].id %>" class="btn article-link-button margin-top">Visit Article</a>
+				<% if(currentUser.isAdmin == true){ %>
+				<i data-id="<%= posts[i].id %>" class="full-width btn delete-post icon-option fas fa-trash-alt"></i>
+				<% } %>
+			</div>
+		</div>
+	</div>
+	<% } %>
 </div>
 
 <%- include('partials/footer') -%>

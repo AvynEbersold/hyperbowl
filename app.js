@@ -132,6 +132,7 @@ const userSchema = new mongoose.Schema({
 			datePosted: String,
 		},
 	],
+	isAdmin: Boolean,
 });
 
 const feedbackSchema = new mongoose.Schema({
@@ -647,8 +648,7 @@ app
 		if (req.isAuthenticated()) {
 			Post.findById(req.params.postId, function (err, foundPost) {
 				if (!err) {
-					console.log(req.user._id.toString() == '5e39f3bea0ba040004fa9dfc');
-					if (req.user._id.toString() == foundPost.author.toString() || req.user._id.toString() == '5e39f3bea0ba040004fa9dfc') {
+					if (req.user._id.toString() == foundPost.author.toString() || req.user.isAdmin == true) {
 						foundPost.remove();
 						foundPost.save();
 						User.findById(foundPost.author, function (err, foundUser) {
@@ -1454,6 +1454,7 @@ app
 						email: req.body.email,
 						profileImage: req.body.profileImage,
 						dateJoined: currentDate.getMonth() + 1 + '/' + currentDate.getDate() + '/' + currentDate.getFullYear(),
+						isAdmin: false,
 					},
 					req.body.password,
 					function (err, user) {
@@ -1641,6 +1642,7 @@ app
 					foundUser.profileImage = req.body.userProfileImage;
 					foundUser.email = req.body.userEmail;
 					foundUser.preferences.styles.profileBackgroundImage = req.body.userBackgroundProfileImage;
+					foundUser.preferences.styles.dashboardBackgroundImage = req.body.userBackgroundDashboardImage;
 					foundUser.save();
 					res.redirect('/settings');
 				}
