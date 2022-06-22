@@ -5,7 +5,7 @@
   "main": "app.js",
   "dependencies": {
     "assert": "^2.0.0",
-    "async": "^3.1.0",
+    "async": "^3.2.2",
     "await": "^0.2.6",
     "body-parser": "^1.18.3",
     "crypto": "^1.0.1",
